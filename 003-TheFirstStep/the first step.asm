@@ -1,6 +1,8 @@
 ;*** variables
-SCREEN  = $0400         ;start of screen memory
-CHAR    = $41           ;spade character for output
+SCREEN   = $0400         ;start of screen memory
+CHAR     = $41           ;spade character for output
+COLORRAM = $d800         ;color-ram start
+COLORNR  = $00           ;black ($00) as color for characters
 
 ;*** start address, BASIC line
 *=$0801
@@ -14,4 +16,13 @@ loop
         sta SCREEN-1,x  ;output A to screen
         dex           
         bne loop
-        rts
+        
+;*** setting the color...
+ lda #COLORNR
+ ldx #$ff        ;loop counter
+ 
+colorloop
+ sta COLORRAM-1,x ;write A to color-ram
+ dex           
+ bne colorloop      
+ rts       
